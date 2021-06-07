@@ -1,0 +1,206 @@
+@font-face {
+    font-family: 'HelveticaNeueBold';
+    src: url('@/assets/fonts/HelveticaNeueBold.ttf');
+}
+
+* {
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+
+    background-color: rgb(61, 61, 61);
+    color: white;
+    font-family: 'HelveticaNeueBold';    
+}
+
+
+input[type="text"], input[type="button"], input[type="submit"], select {
+    padding: .5em;
+}
+
+.layout {
+    padding: 1em;
+}
+
+/**************
+  Join Container
+***************/
+.join-container {
+    display: grid;  
+    place-content: center;        
+    height: 100vh;
+    width: 100vw;
+    gap: 1em;
+
+    input[type="text"] {
+        padding: 1em;
+    }
+
+    input[type="button"] {
+        padding: 1em;
+    }
+}
+
+
+/*************
+  HOME 
+*************/
+#home-page {
+    display: grid;
+    grid-template-columns: 9fr 3fr;
+    gap: 1em;
+}
+
+#game {
+    border-right: 2px solid white;
+}
+
+/**************
+  Main Game / Chat 
+**************/
+.center-grid {
+    display: grid;
+    place-content: center;
+}
+
+.grid {
+    display: none;
+    grid-template-columns: 9fr 3fr;
+    gap: 1em;
+}
+
+
+.game {    
+    border-right: 1px solid red;
+    padding: .5em;
+}
+
+
+
+.chat-container {    
+
+    .message-container {
+        margin-top: 1em;
+        input[type="text"] {
+            padding: .5em;    
+        }
+
+        input[type="button"] {
+            padding: .5em;
+        }        
+    }
+
+
+    .chat {
+        height: 70vh;
+        background-color: #0D1418;
+        padding: .5em;
+        overflow-y: scroll;
+    }
+
+    .chat-message {
+        margin: .5em;
+        color: #E7E7E8;
+        padding: .5em;
+        background-color:#262D31;
+        
+        border-radius: 5px;
+
+        span.chat-name {
+            color: #63B7D8;
+            margin-right: 1em;
+        }
+
+        span.time {
+            color: orange;
+        }
+
+        .msg {
+            margin-top: .5em;
+        }
+    }
+
+    .chat-notification {
+        margin: .5em;
+        color: black;
+        padding: .5em;
+        border: 1px solid red;
+        width: max-content;
+        border-radius: 5px;        
+        span.chat-name {
+            color: red;
+            margin-right: 1em;
+        }
+
+        span.time {
+            color: orange;
+        }
+
+        span.msg {
+            color: green;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+.white-card-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.card {
+    font-family: 'HelveticaNeueBold';    
+    font-size: 1em;    
+    min-width: 6em;
+    min-height: 7em;
+    padding: .5em;
+    border-radius: 5px;
+    margin: .5em;
+}
+
+.black-card {
+    background-color: black;    
+    color: white;
+}
+
+.white-card {
+    background-color: white;
+    color: black;
+    display: block;
+    float: left;
+
+    width: 10em;
+    height: 10em;    
+
+    &:hover {
+        cursor: pointer;
+        background-color: green;    
+        color: white;        
+    }
+}
+
+
+
+// .card-select {
+//     .card-set {
+//         display: inline-block;
+//         padding:.5em;
+//         border: 1px solid red;
+//         border-radius: 5px;
+//         margin: .5em;
+//     }
+// }
