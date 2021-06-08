@@ -149,6 +149,14 @@ input[type="text"], input[type="button"], input[type="submit"], select {
   color: green;
 }
 
+.topgrid {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  gap: 1em;
+}
+
 .white-card-container {
   display: -ms-grid;
   display: grid;
@@ -159,8 +167,8 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 .card {
   font-family: 'HelveticaNeueBold';
   font-size: 1em;
-  min-width: 6em;
-  min-height: 7em;
+  width: 10em;
+  height: 7em;
   padding: .5em;
   border-radius: 5px;
   margin: .5em;
@@ -169,6 +177,7 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 .black-card {
   background-color: black;
   color: white;
+  width: 100%;
 }
 
 .white-card {
@@ -177,12 +186,29 @@ input[type="text"], input[type="button"], input[type="submit"], select {
   display: block;
   float: left;
   width: 10em;
-  height: 10em;
+  height: 7em;
 }
 
 .white-card:hover {
   cursor: pointer;
   background-color: green;
   color: white;
+}
+
+.droppable {
+  border: 10px dashed red !important;
+  background-color: red;
+}
+
+.currentSelected {
+  opacity: .5;
+}
+
+.userCardToPick {
+  border: dashed 2px green;
+  display: -ms-grid;
+  display: grid;
+  padding: 1em;
+  place-content: center;
 }
 /*# sourceMappingURL=style.css.map */

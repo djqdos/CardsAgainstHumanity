@@ -5,7 +5,7 @@
             <input type="button" id="startGame" name="startGame" value="Start Game" @click="startGame" />
         </div>
         <div v-else>            
-            <div v-if="AmIGameHost">
+            <div id="gamehost" v-if="AmIGameHost">
                 You are the host <br />
                 Selected Set: {{ gameSettings.selectedSet}}
                 <br />
@@ -27,12 +27,31 @@
 
 
         <div v-if="cardsDealt">
-            <div class="card black-card">
-                {{ dealtCards.black.text }}
-            </div>
+            <div class="dealtCards">
+                <div class="topgrid">
+                    <div class="card black-card">
+                        {{ dealtCards.black.text }}
+                    </div>
 
-            <div class="card white-card" v-for="whiteCard in dealtCards.white" :key="whiteCard.text">
-                {{ whiteCard.text}}
+                    <div class="userCards">
+                        <div v-for="(card, index) in userCardsToRender" :key="card.cardId">
+                            <div class="card userCardToPick" 
+                                 v-on:drop="drop"
+                                 v-on:dragover="allowDrop"
+                                 v-on:dragenter="dragEnter"
+                                 v-on:dragleave="dragLeave"
+                                 :id="`userCardId-${card.cardId}`">                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div draggable="true" 
+                     class="card white-card" 
+                    v-on:dragstart="drag"
+                     v-for="(whiteCard, index) in dealtCards.white" :key="whiteCard.text"
+                     :id="`whitecard-${index}`">
+                    {{ whiteCard.text}}
+                </div>
             </div>
         </div>
     </div>
@@ -51,11 +70,13 @@ export default {
             dealtCards: {},
             whiteCardsPerPlayer: 10,
             selectedSet: null,
+            userCardsToRender: [],
 
             gameSettings: {
                 gameStarted: false,
                 userWhoStartedGame: {},
-                selectedSet: ''
+                selectedSet: '',
+                userCardsSelected: []
             },
         }
     },  
@@ -79,8 +100,11 @@ export default {
             this.$router.replace("/join");
         }
 
+//        this.socket = this.$nuxtSocket({ persist: "mysocket" });
+
         this.socket =  this.$nuxtSocket({
             name: 'main',
+            persist: 'mysocket',
             query: {
                 username: this.userData.username,
                 id: this.userData.id
@@ -96,9 +120,23 @@ export default {
         });  
         
         this.socket.on("dealt-cards", data => {
-            console.log("asdasdasdasdas");
-            console.log("data = ", data);
             this.dealtCards = data;
+
+            const cardsToPick = data.black.pick;
+            this.userCardsToRender = [];
+            for( var x=1; x<=cardsToPick; x++) {
+                const c = {
+                    cardId: x,
+                    cardText: ''
+                };
+                this.userCardsToRender.push(c);
+            }
+            if(this.AmIGameHost) {
+                console.log("you are game host!");
+                const gamehost = document.getElementById("gamehost");
+                gamehost.style.display = "none";
+            }
+            
         });
 
         this.socket.on("load-cards", data => {            
@@ -137,7 +175,44 @@ export default {
                 chosenSet: this.gameSettings.selectedSet
             };
             this.socket.emit("deal-cards", d);
-        }        
+        },
+        
+        
+        allowDrop(e) {
+            e.preventDefault();                        
+        },
+        drag(e) {            
+            e.dataTransfer.setData("text", e.target.id);            
+        },
+        drop(e) {
+            e.preventDefault();
+            console.log("e = ", e.target);
+            
+            // remove any existing stuff
+            var target = e.target;
+            
+
+            // create copy and drop
+            var data = e.dataTransfer.getData("text");
+            var nodeCopy = document.getElementById(data).cloneNode(true);
+            nodeCopy.id = "newItem";   
+            nodeCopy.draggable = false;                  
+            e.target.appendChild(nodeCopy);
+
+            // set styling on original
+            var draggedItem = document.getElementById(data);
+            draggedItem.classList.add("currentSelected");
+
+        },
+        dragEnter(e) {
+            e.preventDefault();
+            e.target.classList.add("droppable");
+        },
+        dragLeave(e) {
+            e.preventDefault();
+            e.target.classList.remove("droppable");
+        }
+
     }
 }
 </script>

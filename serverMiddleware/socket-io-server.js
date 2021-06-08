@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const botName = "ChatBot";
+const moment = require("moment");
 
 const { formatMessage } = require("../serverUtils/messages");
 const { userJoin, 
@@ -47,13 +48,28 @@ io.on("connection", (socket) => {
     if(userId) {
         userJoin(userId, username, socket.id);
         socket.join(userId);
+
+        const t= {
+            userdata: {
+                username: botName,
+                id: 'x'
+            },
+            text: `Welcome to the chat, ${username}`,
+            time: moment().format("h:mm a")
+        };
+        const msg = formatMessage(t);
+        io.emit("join-message", t);
+        
         io.emit("users", getUsers());
     }
     
+
+    socket.on("test", () => {
+        console.log("TEST");
+    });
+
     socket.on("join-chat", username => {
         const user = userJoin(socket.id, username);    
-        const msg = formatMessage(botName, `${user.username} has joined`, user.id);
-
         //socket.broadcast.emit("message", msg);        
         //io.to(user.id).emit("message", formatMessage(botName, `Welcome to the chat!`, user.id));
         io.emit("users", getUsers());

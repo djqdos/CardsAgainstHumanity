@@ -33,17 +33,20 @@ export default {
         this.userData = ud;
         if(!ud) {
             this.$router.replace("/join");
-        }
+        }        
 
         this.socket =  this.$nuxtSocket({
-            name: 'main',
+            name: 'main',            
             query: {
                 username: this.userData.username,
                 id: this.userData.id
             }
         });          
         
-
+        this.socket.on("join-message", data => {
+            console.log("data = ", data);
+            this.displayMessage(data);
+        });
 
         this.socket.on("message", data => {            
             this.displayMessage(data);

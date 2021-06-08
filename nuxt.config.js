@@ -75,6 +75,7 @@ export default {
     sockets: [{
       name: 'main',
       url: 'http://192.168.1.3:3001/',
+    
       vuex: {
         mutations: [{
           join: "SET_USERNAME",

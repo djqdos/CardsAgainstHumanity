@@ -4,11 +4,11 @@
     <header>
         <h1>Cards Against Humanity</h1>  
 
-        <div class="user-list">
+        <!-- <div class="user-list">
               <span class="user" v-for="user in users" :key="user.id">
                   {{ user.username }}
               </span>
-        </div>
+        </div> -->
     </header>
 
 
@@ -29,26 +29,29 @@ export default {
     },  
 
     mounted() {
-        const ud = JSON.parse(localStorage.getItem("user"));
-        this.userData = ud;
-        if(!ud) {
-            this.$router.replace("/join");
-        }
+         const ud = JSON.parse(localStorage.getItem("user"));
+         this.userData = ud;
+        // if(!ud) {
+        //     this.$router.replace("/join");
+        // }
 
         this.socket =  this.$nuxtSocket({
             name: 'main',
+            persist: 'mysocket',
             query: {
                 username: this.userData.username,
                 id: this.userData.id
             }
         }); 
         
+        //this.socket = this.$nuxtSocket({ persist: "mysocket" });
+
         this.socket.on("users", data => {
             this.users = data;
-            // const cu = this.users.filter(x => x.id === this.userData.id)[0];
-            // if(cu) {
-            //     this.socketId = cu.socketId;
-            // }            
+            const cu = this.users.filter(x => x.id === this.userData.id)[0];
+            if(cu) {
+                this.socketId = cu.socketId;
+            }            
         });        
     }
 }
