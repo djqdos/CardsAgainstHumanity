@@ -3,6 +3,11 @@
   src: url("@/assets/fonts/HelveticaNeueBold.ttf");
 }
 
+:root {
+  --card-height: 180px;
+  --card-width: 140px;
+}
+
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -27,6 +32,44 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 
 .layout {
   padding: 1em;
+}
+
+/**************
+     User
+***************/
+.user {
+  position: relative;
+  background-color: #292929;
+  margin: .5em;
+  padding: .5em;
+  border-radius: 5px;
+  color: orange;
+}
+
+.user.me {
+  border-bottom: 2px solid #63B7D8;
+}
+
+.user.me::after {
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  content: 'ME';
+  font-size: 70%;
+  text-decoration: none;
+}
+
+.user.host::after {
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  content: 'HOST';
+  font-size: 70%;
+  text-decoration: none;
 }
 
 /**************
@@ -55,13 +98,19 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 #home-page {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 9fr 3fr;
-      grid-template-columns: 9fr 3fr;
+  -ms-grid-columns: 9fr minmax(20%, 3fr);
+      grid-template-columns: 9fr minmax(20%, 3fr);
   gap: 1em;
 }
 
 #game {
   border-right: 2px solid white;
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
+}
+
+#join-page {
+  height: 80vh;
 }
 
 /**************
@@ -75,8 +124,8 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 
 .grid {
   display: none;
-  -ms-grid-columns: 9fr 3fr;
-      grid-template-columns: 9fr 3fr;
+  -ms-grid-columns: 9fr minmax(20%, 3fr);
+      grid-template-columns: 9fr minmax(20%, 3fr);
   gap: 1em;
 }
 
@@ -87,10 +136,17 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 
 .chat-container .message-container {
   margin-top: 1em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .chat-container .message-container input[type="text"] {
   padding: .5em;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  margin-right: .5em;
 }
 
 .chat-container .message-container input[type="button"] {
@@ -123,6 +179,7 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 
 .chat-container .chat-message .msg {
   margin-top: .5em;
+  word-wrap: break-word;
 }
 
 .chat-container .chat-notification {
@@ -150,65 +207,141 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 }
 
 .topgrid {
-  display: -ms-grid;
-  display: grid;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   -ms-grid-columns: 1fr 1fr;
       grid-template-columns: 1fr 1fr;
   gap: 1em;
+  margin-bottom: 1em;
+}
+
+.topgrid input[type="button"] {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
 }
 
 .white-card-container {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: (1fr)[5];
-      grid-template-columns: repeat(5, 1fr);
+  width: 100%;
 }
 
 .card {
   font-family: 'HelveticaNeueBold';
-  font-size: 1em;
-  width: 10em;
-  height: 7em;
-  padding: .5em;
+  font-size: .8em;
+  width: var(--card-width);
+  height: var(--card-height);
+  padding: 1em;
   border-radius: 5px;
-  margin: .5em;
+  position: relative;
+}
+
+.card img {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  height: 15px;
 }
 
 .black-card {
   background-color: black;
   color: white;
-  width: 100%;
 }
 
 .white-card {
   background-color: white;
   color: black;
   display: block;
-  float: left;
-  width: 10em;
-  height: 7em;
+  -webkit-box-shadow: 1px 1px 1px black;
+          box-shadow: 1px 1px 1px black;
+  -webkit-transition: -webkit-transform .2s ease;
+  transition: -webkit-transform .2s ease;
+  transition: transform .2s ease;
+  transition: transform .2s ease, -webkit-transform .2s ease;
 }
 
-.white-card:hover {
+.white-card-anim:hover {
   cursor: pointer;
-  background-color: green;
-  color: white;
+  -webkit-transform: scale(1.1, 1.1) rotate(-4deg);
+          transform: scale(1.1, 1.1) rotate(-4deg);
 }
 
 .droppable {
-  border: 10px dashed red !important;
-  background-color: red;
+  background-image: linear-gradient(45deg, #686968 25%, #4a4a4a 25%, #4a4a4a 50%, #686968 50%, #686968 75%, #4a4a4a 75%, #4a4a4a 100%);
+  background-size: 28.28px 28.28px;
 }
 
 .currentSelected {
-  opacity: .5;
+  opacity: .3;
+}
+
+.currentSelected:hover {
+  -webkit-transform: scale(1, 1) rotate(0deg);
+          transform: scale(1, 1) rotate(0deg);
+}
+
+.userCards {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .userCardToPick {
   border: dashed 2px green;
-  display: -ms-grid;
-  display: grid;
-  padding: 1em;
-  place-content: center;
+  display: inline-block;
+  width: var(--card-width);
+  height: var(--card-height);
+  border-radius: 5px;
+  margin-right: 1em;
+}
+
+.userCardToPick > div:hover {
+  cursor: pointer;
+  -webkit-transform: scale(1, 1) rotate(0);
+          transform: scale(1, 1) rotate(0);
+}
+
+/*************
+  SUBMISSIONS
+*************/
+.submissions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.submissions .username {
+  margin: auto;
+}
+
+.submissions > div {
+  margin: 1em;
+}
+
+.submissions .submissions-whitecard {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.submissions .submissions-whitecard > div {
+  margin-left: 1em;
+}
+
+/*************
+  ANIMATIONS 
+*************/
+@media (-webkit-device-pixel-ratio: 1) {
+  .card {
+    height: 13em;
+    width: 9em;
+    font-size: 1.2em;
+  }
+}
+
+@media (-webkit-device-pixel-ratio: 1.25) {
+  body {
+    background-color: red;
+  }
 }
 /*# sourceMappingURL=style.css.map */

@@ -3,13 +3,19 @@
         <div class="chat-global-container">    
             <div class="chat-container">
                 <div class="chat">
-
+                    <div class="chat-message" 
+                        v-anime="{opacity: 1, duration: 2000}"
+                        v-for="(chatMessage, index) in $store.state.chatMessages" :key="index">
+                        <span class="chat-name">{{ chatMessage.userdata.username}}</span>
+                        <span class="time">{{ chatMessage.time }}</span>
+                        <div class="msg">{{chatMessage.text}}</div>
+                    </div>
                 </div>
                 <div class="message-container">
                     <input type="text" name="msg" id="msg" />
                     <input type="button" name="sendMsg" id="sendMsg" value="Send" @click="sendMsg" />
-                </div>  
-                {{ socketId }}            
+                </div>                  
+                 
             </div>
         </div>
     </div>    
@@ -20,75 +26,32 @@ import { formatPost } from '../serverUtils/socketUtils.js';
 
 export default {
     name: "Chat",
-    data() {
-        return {
-            users: [],
-            userData: {},
-            socketId: ''
-        }
-    },    
-
     mounted() {       
-        const ud = JSON.parse(localStorage.getItem("user"));
-        this.userData = ud;
-        if(!ud) {
-            this.$router.replace("/join");
-        }        
 
-        this.socket =  this.$nuxtSocket({
-            name: 'main',            
-            query: {
-                username: this.userData.username,
-                id: this.userData.id
-            }
-        });          
-        
-        this.socket.on("join-message", data => {
+        this.$socket.$subscribe("join-message", data => {
             console.log("data = ", data);
             this.displayMessage(data);
         });
 
-        this.socket.on("message", data => {            
-            this.displayMessage(data);
+        this.$socket.$subscribe("message", data => {            
+           // this.displayMessage(data);
         });
+    },
 
-        this.socket.on("users", data => {
-            this.users = data;
-
-            const cu = this.users.filter(x => x.id === this.userData.id)[0];
-            if(cu) {
-                this.socketId = cu.socketId;
-            }            
-        });
+    updated: function() {
+        var chatBox = document.querySelector(".chat");
+        chatBox.scrollTop = chatBox.scrollHeight;   
     },
 
     methods: {
         /* CHAT FUNCTIONS */
         sendMsg() {
             const msg = document.getElementById("msg").value;
-            const postData = formatPost(this.userData, msg);
-            this.socket.emit("chat-message", postData);
-        },
-        sendMsgPrivate() {
-            const msg = document.getElementById("msg").value;
-            const privId = document.getElementById("msgIdPrivate").value;
-            this.socket.emit("private-message", msg, privId);
-        },
-        joinChat() {
-            var chatContainer = document.querySelector(".join-container");
-            var userName = document.getElementById("username");
-            var joinButton = document.getElementById("joinChat");
-
-            this.socket.emit("join-chat", userName.value);
-            userName.disabled = true;
-            joinButton.disabled = true;
-
-            const maingameContainer = document.getElementById("maingame");
-            const joinContainer = document.getElementById("joinContainer");
-
-            joinContainer.style.display = "none";
-            maingameContainer.style.display = "grid";
-
+            if(msg.length > 0) {
+                this.$socket.client.emit("chat-message", msg);            
+            }            
+            document.getElementById("msg").value = "";
+            document.getElementById("msg").focus();
         },
         displayMessage(data) {
             console.log("displayMessage called");
@@ -106,9 +69,6 @@ export default {
                 chatBox.scrollTop = chatBox.scrollHeight;            
             }
         },
-        showUsers(data) {
-            this.users = data;
-        }
     }
 }
 </script>

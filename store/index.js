@@ -1,39 +1,48 @@
+import Cookies from 'js-cookie'
+import cookie from 'cookie'
+
 export const state = () => ({
-    user: {},
-    users: [],
-    sessionId: ""
+    currentUser: {},
+    users: [],    
+    chatMessages:[],
+    gameData: {
+        gameStarted: false,
+        host: null,
+        setSelected: null, 
+    },
+    dealtCards: null,
+    submittedChoice: []
 });
 
 export const mutations = {
-    setUser(state, user) {
-        state.user = user;
+
+    // set when user types in name
+    currentUser(state, user) {
+        state.currentUser = user;
     },
 
-    updateUsers(state, users) {
+    // set via socket.io
+    SOCKET_USERS(state, users) {
         state.users = users;
     },
 
-    setSocket(state, socket) {
-        state.socket = socket;
+    SOCKET_GAMEDATA(state, data) {
+        state.gameData = data;
     },
 
-    setSessionId(state, uuid) {
-        state.sessionId = uuid;
+    SOCKET_DEALTCARDS(state, data) {
+        state.dealtCards = data;
     },
 
-    clearData(state) {
-        state.user = {};
-        state.users = [];
-        state.socket = {};
-    }
-}
-
-export const getters = {
-    getUsers(state) {
-        return state.users;
+    SOCKET_MESSAGE(state, data) {
+        state.chatMessages.push(data);
     },
 
-    getUser(state, id) {                
-        return state.users.filter(user => user.id === id)        
+    SOCKET_SUBMITTEDCHOICE(state, data) {
+        state.submittedChoice.push(data);
+    },
+
+    SOCKET_RESETSUBMISSIONS(state, data) {
+        state.submittedChoice = [];
     }
 }

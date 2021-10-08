@@ -1,19 +1,19 @@
 <template>
-    <div class="container" id="join-page">
-        <input type="text" name="name" id="name" placeholder="Name" required />
+    <div class="center-grid" id="join-page">
+        <div>
+            <input type="text" name="name" id="name" placeholder="Name" required />            
 
-        <!-- <input type="text" name="room" id="room" placeholder="Room ID" /> -->
-
-        <input type="submit" name="submit" id="submit" value="Join" @click="join" />
+            <input type="submit" name="submit" id="submit" value="Join" @click="join" />
+        </div>
     </div>
 </template>
 
 <script>
 import { v4 as uuidv4 } from 'uuid';
-
+import Cookies from 'js-cookie'
 export default {
+    layout: 'default',
     name: 'join',
-
     mounted() {
 
     },
@@ -28,10 +28,11 @@ export default {
                 id: newId
             };
             
-            if(process.browser) {
-                localStorage.setItem("user", JSON.stringify(userData));
+            if(process.browser) {                
+                Cookies.set("user", userData);
+                window.location.replace("/home");
             }            
-            this.$router.push("/home");
+            //this.$router.push("/home");
         },
 
     }

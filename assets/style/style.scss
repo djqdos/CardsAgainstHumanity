@@ -3,6 +3,13 @@
     src: url('@/assets/fonts/HelveticaNeueBold.ttf');
 }
 
+:root {
+    --card-height: 180px;
+    --card-width: 140px;    
+}
+
+
+
 * {
     box-sizing: border-box;
 }
@@ -31,6 +38,49 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 }
 
 /**************
+     User
+***************/
+.user {    
+    position: relative;
+    background-color: rgb(41, 41, 41);
+    margin: .5em;
+    padding: .5em;
+    border-radius: 5px;
+    color: orange;
+
+    &.me {
+        border-bottom: 2px solid #63B7D8;
+        &::after {
+            position: absolute;
+            bottom: -17px;
+            left: 50%;
+            transform: translateX(-50%);
+            content: 'ME';
+            font-size: 70%;
+            text-decoration: none;
+        }        
+    }
+
+    &.host {
+        &::after {
+            position: absolute;
+            bottom: -17px;
+            left: 50%;
+            transform: translateX(-50%);
+            content: 'HOST';
+            font-size: 70%;
+            text-decoration: none;
+        }
+    }
+}
+
+
+
+
+
+
+
+/**************
   Join Container
 ***************/
 .join-container {
@@ -55,12 +105,17 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 *************/
 #home-page {
     display: grid;
-    grid-template-columns: 9fr 3fr;
+    grid-template-columns: 9fr minmax(20%, 3fr);
     gap: 1em;
 }
 
 #game {
     border-right: 2px solid white;
+    grid-template-columns: 1fr;
+}
+
+#join-page {
+    height: 80vh;
 }
 
 /**************
@@ -73,7 +128,7 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 
 .grid {
     display: none;
-    grid-template-columns: 9fr 3fr;
+    grid-template-columns: 9fr minmax(20%, 3fr);
     gap: 1em;
 }
 
@@ -89,8 +144,12 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 
     .message-container {
         margin-top: 1em;
+        display: flex;
+
         input[type="text"] {
             padding: .5em;    
+            flex: 1;
+            margin-right: .5em;
         }
 
         input[type="button"] {
@@ -125,6 +184,7 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 
         .msg {
             margin-top: .5em;
+            word-wrap: break-word;
         }
     }
 
@@ -134,7 +194,8 @@ input[type="text"], input[type="button"], input[type="submit"], select {
         padding: .5em;
         border: 1px solid red;
         width: max-content;
-        border-radius: 5px;        
+        border-radius: 5px;     
+  
         span.chat-name {
             color: red;
             margin-right: 1em;
@@ -151,82 +212,141 @@ input[type="text"], input[type="button"], input[type="submit"], select {
 }
 
 
-
-
 .topgrid {
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 1fr;
     gap: 1em;
+    margin-bottom: 1em;
+
+    input[type="button"] {
+        align-self: center;
+    }
 }
 
 
 
 .white-card-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    // display: grid;
+    // grid-template-columns: repeat(5, 1fr);
+    // gap: 1em;
+
+    width: 100%;
 }
 
 .card {
     font-family: 'HelveticaNeueBold';    
-    font-size: 1em;    
-    width: 10em;
-    height: 7em;
-    padding: .5em;
+    font-size: .8em;    
+    width: var(--card-width);
+    height: var(--card-height);
+    padding: 1em;
     border-radius: 5px;
-    margin: .5em;
+    position: relative;
+
+    img {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        height: 15px;
+    }
 }
 
 .black-card {
     background-color: black;    
-    color: white;
-    width: 100%;
-    
+    color: white;    
 }
 
 .white-card {
     background-color: white;
     color: black;
-    display: block;
-    float: left;
+    display: block;    
+    box-shadow: 1px 1px 1px black; 
+    transition: transform .2s ease;
+}
 
-    width: 10em;
-    height: 7em;    
-
+.white-card-anim {
     &:hover {
-        cursor: pointer;
-        background-color: green;    
-        color: white;        
+        cursor: pointer;                                
+        transform: scale(1.1,1.1) rotate(-4deg);
     }
 }
 
-.userCards {
-    
-}
-
-.droppable {
-    border: 10px dashed red !important;
-    background-color: red;
+.droppable {    
+    background-image: linear-gradient(45deg, #686968 25%, #4a4a4a 25%, #4a4a4a 50%, #686968 50%, #686968 75%, #4a4a4a 75%, #4a4a4a 100%);
+    background-size: 28.28px 28.28px;
 }
 
 .currentSelected {
-    opacity: .5;
+    opacity: .3;
+
+    &:hover {
+        transform: scale(1, 1) rotate(0deg);
+    }
 }
 
+
+.userCards {
+    display:flex;    
+}
 
 .userCardToPick {
     border: dashed 2px green;    
-    display: grid;
-    padding: 1em;
-    place-content: center;
+
+    display: inline-block;
+    width: var(--card-width);
+    height: var(--card-height);
+    border-radius: 5px;    
+    margin-right: 1em;
+
+    > div:hover {
+        cursor: pointer;                                
+        transform: scale(1,1) rotate(0);
+    }
 }
 
 
-// .card-select {
-//     .card-set {
-//         display: inline-block;
-//         padding:.5em;
-//         border: 1px solid red;
-//         border-radius: 5px;
-//         margin: .5em;
-//     }
-// }
+/*************
+  SUBMISSIONS
+*************/
+.submissions {
+    display: flex;
+
+    .username {
+        margin: auto;
+    }
+
+    > div {
+        margin: 1em;
+    }
+
+    .submissions-whitecard {
+        display: flex;
+        > div {
+            margin-left: 1em;
+        }
+    }
+}
+
+
+
+/*************
+  ANIMATIONS 
+*************/
+
+
+
+
+@media (-webkit-device-pixel-ratio: 1.0) {    
+    .card {
+        height: 13em;
+        width: 9em;
+
+        font-size: 1.2em;
+    }
+
+}
+
+@media (-webkit-device-pixel-ratio: 1.25) {
+    body {
+        background-color: red;
+    }    
+}

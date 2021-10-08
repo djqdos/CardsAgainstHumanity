@@ -1,7 +1,7 @@
 const users = [];
 
 // Save the user to array
-function userJoin(id, username, socketId) {
+function userJoin(id, username, socketId) { 
     const user = { id, username, socketId };
 
     const index = users.findIndex(u => u.id === id);

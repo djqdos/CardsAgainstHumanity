@@ -7,16 +7,20 @@ export default {
 
   server: {
     port: 3000,
-    host: '192.168.1.3',
+    host: '0.0.0.0',
     // https: {
     //   key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
     //   cert: fs.readFileSync(path.resolve(__dirname, 'server.crt')),
     // }
   },
 
+  env: {
+    socketUrl: ":3001"
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'cah',
+    title: 'Cards Against Humanity',
     htmlAttrs: {
       lang: 'en'
     },
@@ -37,7 +41,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-     { src: '~/plugins/persistedstate.client.js', mode: 'client' }
+    //  { src: '~/plugins/persistedstate.client.js', mode: 'client' },
+     { src: '~/plugins/socket.js', mode: 'client' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -45,6 +50,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    ['nuxt-animejs']
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -52,9 +58,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/content
-    '@nuxt/content',
-
-    'nuxt-socket-io'
+    '@nuxt/content',    
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -70,20 +74,4 @@ export default {
   serverMiddleware: [
     '~/serverMiddleware/socket-io-server.js'
   ],
-
-  io: {
-    sockets: [{
-      name: 'main',
-      url: 'http://192.168.1.3:3001/',
-    
-      vuex: {
-        mutations: [{
-          join: "SET_USERNAME",
-          setUser: "setUser",
-          users: "setUsers"
-        }]
-      }
-    }]
-  },
-
 }
